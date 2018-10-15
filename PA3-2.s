@@ -1,5 +1,8 @@
 @Vending machine code
-
+	@ Collin Mask
+	@The program calculates the price for a number of peanuts chocolate or p        @retzels in a store
+	@ Assignment PA3-2
+	@
     .global main
     .extern printf
 main:
@@ -34,26 +37,19 @@ main:
     @Your modifications will begin at this point
 
     CMP R1, #1       @Check for "peanuts"
-    BEQ _peanut      @If user entered 1 goto _peanuts
+    MOVEQ R3, #75      @Move 75 cents into R3
+       
     CMP R1, #2       @Check for "chocolate"
-    BEQ _choc        @If user entered 2 goto _choc
+    MOVEQ R3, #125     @Move 125 cents into R3
+    
     CMP R1, #3       @Check for "pretzels"
-    BEQ _pretzel     @If user entered 3 goto _pretzel
-    LDR R0, =msg7    @If we get here user entered
-                     @an illegal selection so print
-                     @error message and terminate
-    BL printf
-    MOV R7, #1
-    SWI #0           @Terminate, error condition
-_peanut:
-    MOV R3, #75      @Move 75 cents into R3
-    BAL _compute
-_choc:
-    MOV R3, #125     @Move 125 cents into R3
-    BAL _compute
-_pretzel:
-    MOV R3, #90      @Move 90 cents into R3
-_compute:
+    MOVEQ R3, #90      @Move 90 cents into R3B
+
+    CMP R1, #3
+    LDRGT R0, =msg7    @If we get here user entered invalid option	
+    BLGT printf    @an illegal selection so print
+
+
     LDR R4, =quantity @Get address of var quantity
     LDR R4, [R4]      @Value of quantity now in R4
     MUL R1, R3, R4    @Multiply number of cents times quantity
@@ -62,6 +58,18 @@ _compute:
     BL printf
     MOV R7, #0
     SWI #0        @Normal exit
+	
+   
+
+    
+_peanut:
+   
+_choc:
+  
+_pretzel:
+    
+_compute:
+
 
 .data
 select: .word 0
